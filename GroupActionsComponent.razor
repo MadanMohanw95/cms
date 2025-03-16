@@ -1,0 +1,60 @@
+@page "/groupActions"
+@using GMIS.Web.Components.Controls
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+
+<div class="container">
+    <div class="card-header h3 text-white bg-green text-center fw-bold p-2">
+        Action Items
+    </div>
+    <div class="mb-3 pt-3">
+        <label>Action Type</label>
+        <DropdownControl TItem="VwListDropDown"
+                         Items="@FilterDropDown"
+                         DisplayProperty="dd => dd.OptionItem"
+                         SelectedItem="@SelectedActionItem"
+                         SelectedItemChanged="EventCallback.Factory.Create<VwListDropDown>(this, OnItemSelected)">
+        </DropdownControl>
+    </div>
+    @{
+        if (SelectedActionItem != null)
+        {
+            <div class="border p-3">
+                
+                <div class="mb-3">
+                    <label>Is Selected</label>
+                    <input type="checkbox" class="form-check-input" @bind="NewItem.IsSelected" />
+                </div>
+                <div class="mb-3">
+                    <label>Comments</label>
+                    <input type="text" class="form-control" @bind="NewItem.Comments" />
+                </div>
+
+                <button class="btn btn-primary" @onclick="AddItem">
+                    @(EditingItem == null ? "Add" : "Update")
+                </button>
+            </div>
+        }
+    }
+    @{
+        if (AddedItems.Any())
+        {
+            <h4 class="mt-4">Action Type</h4>
+            <QuickGrid TGridItem="ActionItemModel" Items="@(AddedItems.AsQueryable())" Class="table table-striped custom-table">
+                @{
+                    foreach (PropertyInfo prop in typeof(ActionItemModel).GetProperties())
+                    {
+                        string displayName = prop.GetCustomAttribute<DisplayAttribute>()?.Name ?? prop.Name;
+                        <PropertyColumn Property="@(item => prop.GetValue(item))" Title="@(displayName)" />
+                    }
+                }
+                <TemplateColumn Title="Actions">
+                    <button class="btn btn-primary btn-sm me-2" @onclick="() => OnUpdateItem(context)">Edit</button>
+                    <button class="btn btn-danger btn-sm" @onclick="() => RemoveItem(context)">Remove</button>
+                </TemplateColumn>
+            </QuickGrid>
+
+        }
+    }
+</div>
