@@ -1,0 +1,97 @@
+@inherits LayoutComponentBase
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
+@attribute [Authorize]
+@inject SideBar.Components.Services.SidebarServices.ISidebarService SidebarService;
+@inject SideBar.Components.Services.ModalServices.IModalService ModalService;
+@if (IsShowContent)
+{
+	<AuthorizeView>
+		<Authorized>
+			<CascadingValue Value="@tokenModel">
+				<CascadingValue Value="@CodeTypes">
+					@*                     <div class="page">
+                        <div class="sidebar">
+                            <NavMenu />
+                        </div>
+                        <main>
+                            <div class="top-row">
+                                <div class="container-fluid text-center ">
+                                    <div><svg class="GmisLogo" /></div>
+                                </div>
+                                       <div class="text-white text-center">User ID: @context.User.Identity?.Name</div>
+                            </div>
+                            <article class="content pt-5">
+                                @Body
+                            </article>
+                        </main>
+                    </div> *@
+
+
+					@* <div class="page"> *@
+					@* 	<div class="sidebar"> *@
+					@* 		<NavMenu /> *@
+					@* 	</div> *@
+					@* 	<main @onclick="@(() => *@
+     @*                { *@
+     @*                    SidebarService.SetState(true); *@
+     @*                    ModalService.HideModal(); *@
+     @*                })"> *@
+					@* 		<div class="top-row"> *@
+					@* 			<div class="container-fluid text-center "> *@
+					@* 				<div><svg class="GmisLogo" /></div> *@
+					@* 			</div> *@
+					@* 			<div class="text-white text-center">User ID: @context.User.Identity?.Name</div> *@
+					@* 		</div> *@
+					@* 		<article class="content pt-5"> *@
+					@* 			@Body *@
+					@* 		</article> *@
+					@* 	</main> *@
+					@* </div> *@
+
+
+
+
+                    <div class="page">
+                        <div class="top-row">
+                            <div class="container-fluid  ps-3 w-75 navbar navbar-dark">
+                                <a class="navbar-brand" href="#" data-bs-placement="left"><svg></svg></a>
+                            </div>
+                            <div class="container-fluid">
+                                <div><svg class="GmisLogo" /></div>
+                            </div>
+                            <div class="text-white text-center">User ID: @context.User.Identity?.Name</div>
+                        </div>
+                        <div class="content-wrapper">
+                            <div class="sidebar"> 
+                                  <NavMenu /> 
+                            </div>
+                              <main @onclick="@(() =>
+                                 { 
+                                     SidebarService.SetState(true); 
+                                     ModalService.HideModal();
+                                 })"> 
+                                 <article class="content pt-5">
+                                    @Body
+                                </article> 
+                            </main> 
+                        </div>
+                    </div>
+
+				</CascadingValue>
+			</CascadingValue>
+		</Authorized>
+	</AuthorizeView>
+	<BlazoredToasts Position="ToastPosition.TopRight"
+					Timeout="10"
+					IconType="IconType.FontAwesome"
+					SuccessClass="success-toast-override"
+					SuccessIcon="fa fa-thumbs-up"
+					ErrorIcon="fa fa-bug" />
+	<div id="blazor-error-ui">
+		An unhandled error has occurred.
+		<a href="" class="reload">Reload</a>
+		<a class="dismiss">🗙</a>
+	</div>
+}
+
